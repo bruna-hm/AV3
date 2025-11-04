@@ -1,16 +1,41 @@
-# React + Vite
+# AV2 – Aerocode (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto é a interface web do sistema de gestão da produção de aeronaves da Aerocode.  
+A aplicação foi desenvolvida como SPA (Single Page Application) utilizando React, com foco em facilidade de uso e aprendizado rápido.
 
-Currently, two official plugins are available:
+## Passo 1 — Clonar o repositório
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+git clone https://github.com/bruna-hm/AV2.git
 
-## React Compiler
+## Passo 2 — Acessar a pasta do projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+cd AV2
 
-## Expanding the ESLint configuration
+## Passo 3 — Instalar dependências
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Certifique-se de que o Node.js está instalado no computador.  
+Depois execute o comando abaixo para instalar as dependências:
+
+npm install
+
+## Passo 4 — Executar o projeto
+
+npm run dev
+
+## Passo 5 — Acessar no navegador
+
+Abra o navegador e acesse:
+
+http://localhost:5173/
+
+## Passo 6 — Criar um usuário
+
+Na tela inicial, clique em Registrar e preencha os dados para criar um novo usuário.
+
+## Passo 7 — Fazer login
+
+Após o registro, retorne à tela de Login e entre com o usuário criado para acessar o sistema.
+
+---
+
+A aplicação estará rodando e pronta para uso.
