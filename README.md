@@ -1,41 +1,29 @@
-# AV2 – Aerocode (Frontend)
+# AV3 — Como executar (passos rápidos)
 
-Este projeto é a interface web do sistema de gestão da produção de aeronaves da Aerocode.  
-A aplicação foi desenvolvida como SPA (Single Page Application) utilizando React, com foco em facilidade de uso e aprendizado rápido.
+Requisitos
+- Node.js e npm
+- MySQL acessível
 
-## Passo 1 — Clonar o repositório
+Passos (Windows - PowerShell)
 
-git clone https://github.com/bruna-hm/AV2.git
+1) Abrir o projeto
+cd c:\Users\Bruna\Fatec\3semestre\ProgOrientadaObjetos\AV3\AV3
 
-## Passo 2 — Acessar a pasta do projeto
+2) Configurar variáveis de ambiente
+- Crie o arquivo backend/.env baseado em backend/.env.example com a sua DATABASE_URL (MySQL).
+- Exemplo (não comitar): DATABASE_URL="mysql://<USER>:<PASSWORD>@<HOST>:<PORT>/<DATABASE>"
 
-cd AV2
-
-## Passo 3 — Instalar dependências
-
-Certifique-se de que o Node.js está instalado no computador.  
-Depois execute o comando abaixo para instalar as dependências:
-
+3) Backend: instalar dependências
+cd backend
 npm install
 
-## Passo 4 — Executar o projeto
+4) Prisma: gerar cliente e aplicar esquema
+npx prisma generate
+npx prisma db push    # ou: npx prisma migrate dev (se você usa migrations)
 
-npm run dev
+5) Rodar servidor
+npm start
 
-## Passo 5 — Acessar no navegador
-
-Abra o navegador e acesse:
-
-http://localhost:5173/
-
-## Passo 6 — Criar um usuário
-
-Na tela inicial, clique em Registrar e preencha os dados para criar um novo usuário.
-
-## Passo 7 — Fazer login
-
-Após o registro, retorne à tela de Login e entre com o usuário criado para acessar o sistema.
-
----
-
-A aplicação estará rodando e pronta para uso.
+Observações rápidas
+- Se quiser rodar em desenvolvimento com hot-reload, use o script dev se estiver configurado: npm run dev
+- Nunca comitar backend/.env (use backend/.env.example)
