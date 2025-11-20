@@ -17,10 +17,10 @@ export default function AppRoutes({ usuario }) {
             <Route path="/aeronaves/:id" element={<DetalheAeronave />} />
             <Route path="/aeronaves/:id/pecas/adicionar" element={<AdicionarPeca />} />
             <Route path="/aeronaves/:id/pecas/status" element={<AtualizarStatusPeca />} />
-            <Route path="/aeronaves/:codigo/etapas/adicionar" element={<AdicionarEtapa />} />
-            <Route path="/aeronaves/:codigo/etapas/associar" element={<AssociarFuncionariosEtapa />} />
+            <Route path="/aeronaves/:id/etapas/adicionar" element={<AdicionarEtapa />} />
+            <Route path="/aeronaves/:id/etapas/associar" element={<AssociarFuncionariosEtapa />} />
             <Route path="/aeronaves/:id/testes/adicionar" element={<AdicionarTeste />} />
-            <Route path="/aeronaves/:codigo/relatorios" element={<Relatorio />} />
+            <Route path="/aeronaves/:id/relatorios" element={<Relatorio />} />
         </Routes>
     );
 }

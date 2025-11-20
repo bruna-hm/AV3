@@ -3,11 +3,11 @@ import { useState } from "react";
 
 export default function LoginFuncionarioModal({ autenticarFuncionario, onLogin }) {
     const [openModal, setOpenModal] = useState(false);
-    const [Usuario, setUsuario] = useState("");
-    const [Senha, setSenha] = useState("");
+    const [usuario, setUsuario] = useState("");
+    const [senha, setSenha] = useState("");
 
-    function handleLogin() {
-        const funcionario = autenticarFuncionario(Usuario, Senha);
+    async function handleLogin() {
+        const funcionario = await autenticarFuncionario(usuario, senha);
         if (!funcionario) return alert("Usuário ou senha inválidos!");
         setOpenModal(false);
         if (onLogin) onLogin(funcionario);
@@ -22,11 +22,11 @@ export default function LoginFuncionarioModal({ autenticarFuncionario, onLogin }
                     <div className="space-y-4">
                         <div>
                             <Label htmlFor="usuario">Usuário</Label>
-                            <TextInput id="usuario" value={Usuario} onChange={e => setUsuario(e.target.value)} />
+                            <TextInput id="usuario" value={usuario} onChange={e => setUsuario(e.target.value)} />
                         </div>
                         <div>
                             <Label htmlFor="senha">Senha</Label>
-                            <TextInput id="senha" type="password" value={Senha} onChange={e => setSenha(e.target.value)} />
+                            <TextInput id="senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} />
                         </div>
                         <Button onClick={handleLogin}>Entrar</Button>
                     </div>
@@ -38,21 +38,22 @@ export default function LoginFuncionarioModal({ autenticarFuncionario, onLogin }
 
 export function AdicionarFuncionarioModal({ adicionarFuncionario }) {
     const [openModal, setOpenModal] = useState(false);
-    const [Nome, setNome] = useState("");
-    const [Usuario, setUsuario] = useState("");
-    const [Endereco, setEndereco] = useState("");
-    const [Telefone, setTelefone] = useState("");
-    const [Senha, setSenha] = useState("");
-    const [Nivel, setNivel] = useState("");
+    const [nome, setNome] = useState("");
+    const [usuario, setUsuario] = useState("");
+    const [endereco, setEndereco] = useState("");
+    const [telefone, setTelefone] = useState("");
+    const [senha, setSenha] = useState("");
+    const [nivel, setNivel] = useState("");
 
-    function handleRegister() {
-        if (!Nome || !Usuario || !Endereco || !Telefone || !Senha || !Nivel) {
+    async function handleRegister() {
+        if (!nome || !usuario || !endereco || !telefone || !senha || !nivel) {
             return alert("Preencha todos os campos!");
         }
-        const novoFuncionario = adicionarFuncionario({ Nome, Usuario, Endereco, Telefone, Senha, Nivel });
+        const novoFuncionario = await adicionarFuncionario({ nome, usuario, endereco, telefone, senha, nivel });
+        if (!novoFuncionario) return alert("Erro ao cadastrar funcionário!");
         setOpenModal(false);
         setNome(""); setUsuario(""); setEndereco(""); setTelefone(""); setSenha(""); setNivel("");
-        alert(`Funcionário ${novoFuncionario.Nome} cadastrado!`);
+        alert(`Funcionário ${novoFuncionario.nome} cadastrado!`);
     }
 
     return (
@@ -62,14 +63,29 @@ export function AdicionarFuncionarioModal({ adicionarFuncionario }) {
                 <ModalHeader />
                 <ModalBody>
                     <div className="space-y-4">
-                        <div><Label>Nome</Label><TextInput value={Nome} onChange={e => setNome(e.target.value)} /></div>
-                        <div><Label>Usuário</Label><TextInput value={Usuario} onChange={e => setUsuario(e.target.value)} /></div>
-                        <div><Label>Endereço</Label><TextInput value={Endereco} onChange={e => setEndereco(e.target.value)} /></div>
-                        <div><Label>Telefone</Label><TextInput value={Telefone} onChange={e => setTelefone(e.target.value)} /></div>
-                        <div><Label>Senha</Label><TextInput type="password" value={Senha} onChange={e => setSenha(e.target.value)} /></div>
+                        <div>
+                            <Label>Nome</Label>
+                            <TextInput value={nome} onChange={e => setNome(e.target.value)} />
+                        </div>
+                        <div>
+                            <Label>Usuário</Label>
+                            <TextInput value={usuario} onChange={e => setUsuario(e.target.value)} />
+                        </div>
+                        <div>
+                            <Label>Endereço</Label>
+                            <TextInput value={endereco} onChange={e => setEndereco(e.target.value)} />
+                        </div>
+                        <div>
+                            <Label>Telefone</Label>
+                            <TextInput value={telefone} onChange={e => setTelefone(e.target.value)} />
+                        </div>
+                        <div>
+                            <Label>Senha</Label>
+                            <TextInput type="password" value={senha} onChange={e => setSenha(e.target.value)} />
+                        </div>
                         <div>
                             <Label>Nível de Permissão</Label>
-                            <Select value={Nivel} onChange={e => setNivel(e.target.value)} className="w-full p-2 rounded">
+                            <Select value={nivel} onChange={e => setNivel(e.target.value)} className="w-full p-2 rounded">
                                 <option value="">Selecione</option>
                                 <option value="ADMINISTRADOR">Administrador</option>
                                 <option value="ENGENHEIRO">Engenheiro</option>

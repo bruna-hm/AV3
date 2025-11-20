@@ -1,0 +1,109 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Aeronave {
+  id         Int    @id @default(autoincrement())
+  codigo     String @unique
+  modelo     String
+  tipo       String
+  capacidade Int
+  alcance    Int
+
+  pecas      Peca[]
+  etapas     Etapa[]
+  testes     Teste[]
+  relatorios Relatorio[]
+}
+
+model Funcionario {
+  id       Int            @id @default(autoincrement())
+  nome     String
+  usuario  String         @unique
+  endereco String
+  telefone String
+  senha    String
+  nivel    NivelPermissao
+
+  etapas Etapa[] @relation("FuncionarioEtapas")
+}
+
+enum NivelPermissao {
+  ADMINISTRADOR
+  ENGENHEIRO
+  OPERADOR
+}
+
+model Peca {
+  id         Int        @id @default(autoincrement())
+  nome       String
+  tipo       TipoPeca
+  fornecedor String
+  status     StatusPeca
+
+  aeronaveId Int
+  aeronave   Aeronave @relation(fields: [aeronaveId], references: [id])
+}
+
+enum TipoPeca {
+  NACIONAL
+  IMPORTADA
+}
+
+enum StatusPeca {
+  EM_PRODUCAO
+  EM_TRANSPORTE
+  PRONTA
+}
+
+model Teste {
+  id        Int            @id @default(autoincrement())
+  tipo      TipoTeste
+  resultado ResultadoTeste
+
+  aeronaveId Int
+  aeronave   Aeronave @relation(fields: [aeronaveId], references: [id])
+}
+
+enum TipoTeste {
+  HIDRAULICO
+  ELETRICO
+  AERODINAMICO
+}
+
+enum ResultadoTeste {
+  APROVADO
+  REPROVADO
+}
+
+model Etapa {
+  id     Int         @id @default(autoincrement())
+  nome   String
+  status StatusEtapa
+  prazo  DateTime
+
+  aeronaveId Int
+  aeronave   Aeronave @relation(fields: [aeronaveId], references: [id])
+
+  funcionarios Funcionario[] @relation("FuncionarioEtapas")
+}
+
+enum StatusEtapa {
+  PENDENTE
+  ANDAMENTO
+  CONCLUIDA
+}
+
+model Relatorio {
+  id       Int      @id @default(autoincrement())
+  conteudo String
+  criadoEm DateTime @default(now())
+
+  aeronave   Aeronave @relation(fields: [aeronaveId], references: [id])
+  aeronaveId Int
+}

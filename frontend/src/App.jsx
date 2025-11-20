@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import LoginFuncionarioModal, { AdicionarFuncionarioModal } from "./components/Modals";
 import { AutenticarFuncionario, AdicionarFuncionario } from "./pages/Funcionarios";
@@ -11,17 +11,25 @@ function AppInterno() {
   const [usuario, setUsuario] = useState("");
   const [logado, setLogado] = useState(false);
 
-  function handleLoginFuncionario(funcionario) {
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
+function handleLoginFuncionario(funcionario) {
+    if (!funcionario) {
+      alert("Usuário ou senha inválidos");
+      return;
+    }
     setLogado(true);
-    setUsuario(funcionario.Nome);
+    setUsuario(funcionario.usuario);
     navigate("/");
-  }
+}
 
   return (
     <>
       {!logado ? (
         <section className="flex flex-col items-center justify-center min-h-screen">
-          <h1 className="font-bold mb-6 text-gray-200">AV2 - AeroCode</h1>
+          <h1 className="font-bold mb-6 text-gray-200">AV3 - AeroCode</h1>
           <h2 className="mb-6 text-gray-400">Produção de Aeronaves</h2>
           
           <div className="flex gap-4">

@@ -1,6 +1,6 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Select, TextInput } from "flowbite-react"
+import { Select, TextInput } from "flowbite-react";
 
 const TipoAeronave = {
     COMERCIAL: "COMERCIAL",
@@ -8,13 +8,21 @@ const TipoAeronave = {
 };
 Object.freeze(TipoAeronave);
 
-
 export default function Aeronaves() {
     const [aeronaves, setAeronaves] = useState([]);
 
     useEffect(() => {
-        const armazenadas = JSON.parse(localStorage.getItem("aeronaves")) || [];
-        setAeronaves(armazenadas);
+        async function carregarAeronaves() {
+            try {
+                const res = await fetch("http://localhost:3000/api/aeronaves");
+                const data = await res.json();
+                setAeronaves(data);
+            } catch (error) {
+                console.error("Erro ao buscar aeronaves:", error);
+            }
+        }
+
+        carregarAeronaves();
     }, []);
 
     return (
@@ -25,13 +33,13 @@ export default function Aeronaves() {
                 <p className="text-gray-500">Nenhuma aeronave cadastrada.</p>
             ) : (
                 <ul className="space-y-3">
-                    {aeronaves.map((a, index) => (
+                    {aeronaves.map((a) => (
                         <li
-                            key={index}
+                            key={a.id}
                             className="p-4 rounded w-80 shadow-md bg-gray-700 !text-white transition"
                         >
                             <Link
-                                to={`/aeronaves/${a.codigo}`}
+                                to={`/aeronaves/${a.id}`}
                                 style={{ color: "white" }}
                                 className="text-xl font-semibold hover:underline !text-white"
                             >
@@ -46,34 +54,34 @@ export default function Aeronaves() {
 }
 
 export function DetalheAeronave() {
-    const { id: codigo } = useParams();
-
+    const { id } = useParams();
     const [aeronave, setAeronave] = useState(null);
     const [pecas, setPecas] = useState([]);
     const [etapas, setEtapas] = useState([]);
     const [testes, setTestes] = useState([]);
 
-    function carregarDados() {
-        const aeronavesArmazenadas = JSON.parse(localStorage.getItem("aeronaves")) || [];
-        const a = aeronavesArmazenadas.find(a => a.codigo === codigo);
-        setAeronave(a);
-
-        const pecasArmazenadas = (JSON.parse(localStorage.getItem("pecas")) || []).filter(p => String(p.aeronaveId) === String(codigo));
-        setPecas(pecasArmazenadas);
-
-        const etapasArmazenadas = (JSON.parse(localStorage.getItem("etapas")) || []).filter(e => e.aeronaveCodigo === codigo);
-        setEtapas(etapasArmazenadas);
-
-        const testesArmazenados = (JSON.parse(localStorage.getItem("testes")) || []).filter(t => t.aeronaveId === codigo);
-        setTestes(testesArmazenados);
-    }
-
     useEffect(() => {
-        carregarDados();
+        async function carregarDados() {
+            try {
+                const resAeronave = await fetch(`http://localhost:3000/api/aeronaves/${id}`);
+                const a = await resAeronave.json();
+                setAeronave(a);
 
-        window.addEventListener("storage", carregarDados);
-        return () => window.removeEventListener("storage", carregarDados);
-    }, [codigo]);
+                const resPecas = await fetch(`http://localhost:3000/api/pecas?aeronaveId=${id}`);
+                setPecas(await resPecas.json());
+
+                const resEtapas = await fetch(`http://localhost:3000/api/etapas/aeronave/${id}`);
+                setEtapas(await resEtapas.json());
+
+                const resTestes = await fetch(`http://localhost:3000/api/testes?aeronaveId=${id}`);
+                setTestes(await resTestes.json());
+            } catch (error) {
+                console.error("Erro ao carregar dados da aeronave:", error);
+            }
+        }
+
+        carregarDados();
+    }, [id]);
 
     if (!aeronave) {
         return <p className="text-center text-red-600">Aeronave não encontrada.</p>;
@@ -83,7 +91,7 @@ export function DetalheAeronave() {
         <div className="flex flex-col items-center p-6 space-y-6">
             <div className="border p-4 rounded w-96 bg-gray-800 text-white shadow">
                 <h2 className="text-2xl font-bold mb-2">{aeronave.codigo} - {aeronave.modelo}</h2>
-                <hr className="mb-3"></hr>
+                <hr className="mb-3" />
                 <p><strong>Tipo:</strong> {aeronave.tipo}</p>
                 <p><strong>Capacidade:</strong> {aeronave.capacidade} Kgs</p>
                 <p><strong>Alcance:</strong> {aeronave.alcance} Kms</p>
@@ -91,7 +99,7 @@ export function DetalheAeronave() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
                 <div className="border p-4 rounded bg-gray-700 text-white shadow">
-                    <h3 className="text-xl font-semibold mb-2">Peças</h3><hr className="mb-3"></hr>
+                    <h3 className="text-xl font-semibold mb-2">Peças</h3><hr className="mb-3" />
                     {pecas.length === 0 ? (
                         <p>Nenhuma peça cadastrada.</p>
                     ) : (
@@ -102,14 +110,14 @@ export function DetalheAeronave() {
                 </div>
 
                 <div className="border p-4 rounded bg-gray-700 text-white shadow">
-                    <h3 className="text-xl font-semibold mb-2">Etapas</h3><hr className="mb-3"></hr>
+                    <h3 className="text-xl font-semibold mb-2">Etapas</h3><hr className="mb-3" />
                     {etapas.length === 0 ? (
                         <p>Nenhuma etapa cadastrada.</p>
                     ) : (
                         etapas.map(e => (
                             <div key={e.id} className="mb-2 border-gray-500 pb-2">
                                 <p className="text-lg"><strong>{e.nome}</strong></p>
-                                <p><em>Staus:</em> {e.status}</p>
+                                <p><em>Status:</em> {e.status}</p>
                                 <p><em>Prazo:</em> {e.prazo}</p>
                                 <p><em>Funcionários:</em></p>
                                 <ul className="list-disc list-inside ml-4">
@@ -124,7 +132,7 @@ export function DetalheAeronave() {
                 </div>
 
                 <div className="border p-4 rounded bg-gray-700 text-white shadow">
-                    <h3 className="text-xl font-semibold mb-2">Testes</h3><hr className="mb-3"></hr>
+                    <h3 className="text-xl font-semibold mb-2">Testes</h3><hr className="mb-3" />
                     {testes.length === 0 ? (
                         <p>Nenhum teste cadastrado.</p>
                     ) : (
@@ -146,24 +154,44 @@ export function AdicionarAeronave() {
     const [alcance, setAlcance] = useState("");
     const navigate = useNavigate();
 
-    function handleSubmit(e) {
-        e.preventDefault();
+async function handleSubmit(e) {
+    e.preventDefault();
 
-        const novaAeronave = { codigo, modelo, tipo, capacidade, alcance };
+        try {
+            const novaAeronave = {
+                codigo,
+                modelo,
+                tipo,
+                capacidade: parseInt(capacidade, 10),
+                alcance: parseInt(alcance, 10)
+            };
 
-        const armazenadas = JSON.parse(localStorage.getItem("aeronaves")) || [];
-        armazenadas.push(novaAeronave);
-        localStorage.setItem("aeronaves", JSON.stringify(armazenadas));
+            const res = await fetch("http://localhost:3000/api/aeronaves", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(novaAeronave),
+            });
 
-        navigate("/aeronaves");
-    }
+            if (!res.ok) {
+                const erro = await res.json();
+                console.error("Erro ao criar aeronave:", erro);
+                alert(`Erro ao criar aeronave: ${erro.error || "Desconhecido"}`);
+                return;
+            }
+            const criada = await res.json();
+            console.log("Aeronave criada:", criada);
+            navigate("/aeronaves");
+        } catch (error) {
+            console.error("Erro ao criar aeronave:", error);
+            alert("Erro ao criar aeronave, veja o console para detalhes.");
+        }
+}
 
     return (
         <div className="flex flex-col items-center p-6">
             <h3 className="text-3xl font-bold mb-6">Cadastrar Aeronave</h3>
 
             <form onSubmit={handleSubmit} className="space-y-4 w-80">
-
                 <div>
                     <label className="block font-semibold">Código:</label>
                     <TextInput
