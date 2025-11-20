@@ -6,8 +6,9 @@ Requisitos
 
 Passos (Windows - PowerShell)
 
-1) Abrir o projeto
-cd c:\Users\Bruna\Fatec\3semestre\ProgOrientadaObjetos\AV3\AV3
+1) Clonar o repositório e abrir o projeto
+git clone <URL-do-repositório>
+cd AV3
 
 2) Configurar variáveis de ambiente
 - Crie o arquivo backend/.env baseado em backend/.env.example com a sua DATABASE_URL (MySQL).
