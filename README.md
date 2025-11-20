@@ -8,7 +8,7 @@
 ## Passo a Passo (Windows / PowerShell / Linux / macOS)
 
 ### 1. Clonar o repositório
-git clone https://github.com/bruna-hm/AV3.git
+git clone https://github.com/bruna-hm/AV3.git  
 cd <caminho para onde repositório foi clonado>
 
 ### 2. Configurar variáveis de ambiente do backend
