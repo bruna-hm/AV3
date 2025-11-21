@@ -56,4 +56,14 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+router.delete("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        await prisma.aeronave.delete({ where: { id: Number(id) } });
+        res.json({ message: "Aeronave removida com sucesso" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export default router;
