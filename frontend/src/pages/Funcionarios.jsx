@@ -102,7 +102,7 @@ export function RemoverFuncionario() {
                 method: "DELETE",
             });
             if (!res.ok) throw new Error("Erro ao excluir funcionário");
-            carregarFuncionarios(); // Atualiza lista após exclusão
+            carregarFuncionarios();
         } catch (error) {
             console.error("Erro ao excluir funcionário:", error);
         }
