@@ -22,4 +22,4 @@ app.use("/api/testes", testesRoutes);
 app.use("/api/etapas", etapasRoutes);
 app.use("/api/relatorios", relatoriosRoutes);
 
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`Backend rodando na porta: ${PORT}`));
