@@ -45,10 +45,9 @@ router.post("/", async (req, res) => {
                 nivel
             }
         });
-        console.log("Novo funcionario criado:", novoFuncionario);
         res.status(201).json(novoFuncionario);
     } catch (error) {
-        console.error("Erro ao criar funcionário:", error); // <--- log real
+        console.error("Erro ao criar funcionário:", error);
         res.status(500).json({ error: "Erro ao criar funcionário", detalhes: error.message });
     }
 });
