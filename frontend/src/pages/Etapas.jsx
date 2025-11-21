@@ -210,3 +210,74 @@ export function AssociarFuncionariosEtapa() {
         </div>
     );
 }
+
+export function RemoverEtapa() {
+    const { id } = useParams();
+
+    const [etapas, setEtapas] = useState([]);
+
+    useEffect(() => {
+        carregarEtapas();
+    }, [id]);
+
+    async function carregarEtapas() {
+        try {
+            const res = await fetch(`http://localhost:3000/api/etapas/aeronave/${id}`);
+            const dados = await res.json();
+            setEtapas(dados);
+        } catch (error) {
+            console.error("Erro ao carregar etapas:", error);
+        }
+    }
+
+    async function excluirEtapa(etapaId) {
+        const confirmar = window.confirm("Tem certeza que deseja excluir esta etapa?");
+        if (!confirmar) return;
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/etapas/${etapaId}`, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) throw new Error("Erro ao excluir etapa");
+            carregarEtapas();
+        } catch (error) {
+            console.error("Erro:", error);
+        }
+    }
+
+    return (
+        <div className="flex flex-col items-center p-6">
+            <h2 className="text-xl font-bold mb-4">Remover Etapas da Aeronave {id}</h2>
+
+            {etapas.length === 0 ? (
+                <p>Nenhuma etapa cadastrada para esta aeronave.</p>
+            ) : (
+                <ul className="space-y-4 w-full max-w-md">
+                    {etapas.map(etapa => (
+                        <li
+                            key={etapa.id}
+                            className="p-4 text-black rounded"
+                        >
+                            <div className="font-semibold text-lg">{etapa.nome}</div>
+                            <p>Status: {etapa.status}</p>
+                            <p>
+                                Prazo:{" "}
+                                {etapa.prazo
+                                    ? new Date(etapa.prazo).toLocaleDateString("pt-BR")
+                                    : "—"}
+                            </p>
+
+                            <button
+                                onClick={() => excluirEtapa(etapa.id)}
+                                className="mt-3 w-full text-white py-1 rounded hover:bg-red-700"
+                            >
+                                Excluir Etapa
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+}

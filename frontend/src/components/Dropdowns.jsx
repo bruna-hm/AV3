@@ -18,6 +18,13 @@ export function DropDAeronaves() {
             >
                 Adicionar Aeronave
             </NavLink>
+            <NavLink
+                to="/aeronaves/remover"
+                style={{ color: "white" }}
+                className="block px-4 py-2 hover:bg-gray-500"
+            >
+                Remover Aeronave
+            </NavLink>
         </Dropdown>
     );
 }
@@ -53,6 +60,13 @@ export function DropDPecas({ aeronaveCodigo }) {
             >
                 Atualizar Status
             </NavLink>
+            <NavLink
+                to={`/aeronaves/${aeronaveCodigo}/pecas/remover`}
+                style={{ color: "white" }}
+                className="block px-4 py-2 hover:bg-gray-500"
+            >
+                Remover
+            </NavLink>
         </Dropdown>
     );
 }
@@ -74,6 +88,13 @@ export function DropDEtapas({ aeronaveCodigo }) {
             >
                 Associar Funcionários
             </NavLink>
+            <NavLink
+                to={`/aeronaves/${aeronaveCodigo}/etapas/remover`}
+                style={{ color: "white" }}
+                className="block px-4 py-2 hover:bg-gray-500"
+            >
+                Remover Etapa
+            </NavLink>
         </Dropdown>
     );
 }
@@ -88,6 +109,13 @@ export function DropDTestes({ aeronaveCodigo }) {
             >
                 Adicionar
             </NavLink>
+            <NavLink
+                to={`/aeronaves/${aeronaveCodigo}/testes/remover`}
+                style={{ color: "white" }}
+                className="block px-4 py-2 hover:bg-gray-500"
+            >
+                Remover
+            </NavLink>
         </Dropdown>
     );
 }
@@ -100,6 +128,12 @@ export function DropDFuncionarios() {
                 style={{ color: "white" }}
                 className="block px-4 py-2 hover:bg-gray-500"
             >Lista de Funcionários
+            </NavLink>
+            <NavLink
+                to={`/funcionarios/remover`}
+                style={{ color: "white" }}
+                className="block px-4 py-2 hover:bg-gray-500"
+            >Remover Funcionário
             </NavLink>
         </Dropdown>
     );

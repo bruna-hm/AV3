@@ -255,3 +255,65 @@ async function handleSubmit(e) {
         </div>
     );
 }
+
+export function RemoverAeronave() {
+    const [aeronaves, setAeronaves] = useState([]);
+
+    useEffect(() => {
+        carregarAeronaves();
+    }, []);
+
+    async function carregarAeronaves() {
+        try {
+            const res = await fetch("http://localhost:3000/api/aeronaves");
+            if (!res.ok) throw new Error("Erro ao carregar aeronaves");
+            const dados = await res.json();
+            setAeronaves(dados);
+        } catch (error) {
+            console.error("Erro ao carregar aeronaves:", error);
+        }
+    }
+
+    async function excluirAeronave(aeronaveId) {
+        const confirmar = window.confirm("Tem certeza que deseja excluir esta aeronave?");
+        if (!confirmar) return;
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/aeronaves/${aeronaveId}`, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) throw new Error("Erro ao excluir aeronave");
+            carregarAeronaves();
+        } catch (error) {
+            console.error("Erro ao excluir aeronave:", error);
+        }
+    }
+
+    return (
+        <div className="flex flex-col items-center p-6">
+            <h2 className="text-xl font-bold mb-4">Remover Aeronaves</h2>
+
+            {aeronaves.length === 0 ? (
+                <p>Nenhuma aeronave cadastrada.</p>
+            ) : (
+                <ul className="space-y-4 w-full max-w-md">
+                    {aeronaves.map(a => (
+                        <li key={a.id} className="p-4 text-black rounded">
+                            <div className="font-semibold text-lg">{a.codigo} - {a.modelo}</div>
+                            <p><strong>Tipo:</strong> {a.tipo}</p>
+                            <p><strong>Capacidade:</strong> {a.capacidade} Kgs</p>
+                            <p><strong>Alcance:</strong> {a.alcance} Kms</p>
+                            <button
+                                onClick={() => excluirAeronave(a.id)}
+                                className="mt-3 w-full bg-red-600 text-white py-1 rounded hover:bg-red-700"
+                            >
+                                Excluir Aeronave
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+}

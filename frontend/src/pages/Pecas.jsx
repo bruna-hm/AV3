@@ -187,3 +187,67 @@ export function AtualizarStatusPeca() {
         </div>
     );
 }
+
+export function RemoverPeca() {
+    const { id } = useParams();
+    const [pecas, setPecas] = useState([]);
+
+    useEffect(() => {
+        carregarPecas();
+    }, [id]);
+
+    async function carregarPecas() {
+        try {
+            const res = await fetch(`http://localhost:3000/api/pecas?aeronaveId=${id}`);
+            const data = await res.json();
+            setPecas(data);
+        } catch (error) {
+            console.error("Erro ao carregar peças:", error);
+        }
+    }
+
+    async function excluirPeca(pecaId) {
+        const confirmar = window.confirm("Tem certeza que deseja excluir esta peça?");
+        if (!confirmar) return;
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/pecas/${pecaId}`, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) throw new Error("Erro ao excluir peça");
+
+            carregarPecas();
+        } catch (error) {
+            console.error("Erro ao excluir a peça:", error);
+        }
+    }
+
+    return (
+        <div className="flex flex-col items-center p-6">
+            <h2 className="text-xl font-bold mb-4">Remover Peças da Aeronave {id}</h2>
+
+            {pecas.length === 0 ? (
+                <p>Nenhuma peça cadastrada para esta aeronave.</p>
+            ) : (
+                <ul className="space-y-4 w-full max-w-md">
+                    {pecas.map((peca) => (
+                        <li key={peca.id} className="p-4 rounded text-black">
+                            <div className="font-semibold">{peca.nome}</div>
+                            <p className="text-sm">Tipo: {peca.tipo}</p>
+                            <p className="text-sm">Fornecedor: {peca.fornecedor}</p>
+                            <p className="text-sm">Status: {peca.status}</p>
+
+                            <button
+                                className="mt-3 w-full bg-red-600 text-white py-1 rounded hover:bg-red-700"
+                                onClick={() => excluirPeca(peca.id)}
+                            >
+                                Excluir Peça
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+}
