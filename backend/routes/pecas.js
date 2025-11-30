@@ -58,27 +58,24 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const { nome, tipo, fornecedor, status } = req.body;
+        const { status } = req.body;
 
-        const data = {};
-        if (nome !== undefined) data.nome = nome;
-        if (tipo !== undefined) data.tipo = tipo;
-        if (fornecedor !== undefined) data.fornecedor = fornecedor;
-        if (status !== undefined) data.status = status;
-
-        if (Object.keys(data).length === 0) {
-            return res.status(400).json({ error: "Nenhum campo para atualizar" });
+        if (!status) {
+            return res.status(400).json({ error: "O campo 'status' é obrigatório" });
         }
 
         const pecaAtualizada = await prisma.peca.update({
             where: { id: Number(id) },
-            data,
+            data: { status }
         });
 
         res.json(pecaAtualizada);
     } catch (error) {
-        console.error("Erro ao atualizar peça:", error);
-        res.status(500).json({ error: "Erro ao atualizar peça", detalhes: error.message });
+        console.error("Erro ao atualizar status da peça:", error);
+        res.status(500).json({
+            error: "Erro ao atualizar status da peça",
+            detalhes: error.message
+        });
     }
 });
 
