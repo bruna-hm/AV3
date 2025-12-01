@@ -45,4 +45,12 @@ Esse comando inicia backend e frontend ao mesmo tempo.
 
 ## Comandos alternativos
 npm run backend     (executar apenas o backend)  
-npm run frontend    (executar apenas o frontend)
+npm run frontend    (executar apenas o frontend)  
+  
+## Testes de performance de API
+- k6 deve estar instalado e acessível
+
+k6 run .\backend\k6\nome_do_script_que_deseja_executar
+
+Relatório com informações para interpretação dos dados está em:
+.\relatorio\relatorio_av3
