@@ -20,7 +20,7 @@ Depois abra o arquivo `.env` e configure sua conexão:
 DATABASE_URL="mysql://root:senha@localhost:3306/av3"
 
 ### 3. Instalar dependências
-cd ..  
+cd .. (se estiver seguindo os passos anteriores)
 npm install  
 
 cd backend  
@@ -38,7 +38,7 @@ Ou, se preferir migrations:
 npx prisma migrate dev
 
 ### 5. Iniciar o projeto
-cd ..  
+cd .. (se estiver seguindo os passos anteriores) 
 npm start  
 
 Esse comando inicia backend e frontend ao mesmo tempo.
